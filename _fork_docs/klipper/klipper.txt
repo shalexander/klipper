@@ -1,0 +1,43 @@
+Klipper Site:
+https://www.klipper3d.org/
+
+https://www.klipper3d.org/Installation.html
+
+https://github.com/Klipper3d/klipper/blob/master/docs/FAQ.md
+
+--------------------------------------------------------------
+
+printer.cfg reference:
+https://github.com/Klipper3d/klipper/blob/master/docs/Config_Reference.md
+
+MCU Aliases:
+https://github.com/Klipper3d/klipper/blob/master/config/sample-aliases.cfg
+
+G-Code to Klipper:
+https://www.reddit.com/r/klippers/comments/tj354k/sending_gcode_directly_to_klipper/
+
+https://klipper.discourse.group/t/help-needed-configuring-klipper-to-receive-g-code-commands-via-serial-on-raspberry-pi/11371
+
+Only X and Y axis:
+https://github.com/Klipper3d/klipper/issues/3266
+https://github.com/Klipper3d/klipper/issues/1553
+
+Klipper Virtual Pins:
+https://github.com/pedrolamas/klipper-virtual-pins
+
+Custom Kinematics:
+https://github.com/Klipper3d/klipper/blob/master/docs/Kinematics.md
+https://github.com/Klipper3d/klipper/tree/master/klippy/kinematics
+https://www.klipper3d.org/Code_Overview.html#micro-controller-code-flow
+
+Klipper configs:
+https://github.com/Klipper3d/klipper/tree/master/config
+
+Klipper config checks:
+https://www.klipper3d.org/Config_checks.html
+
+Klipper Arduino Aliases:
+https://github.com/Klipper3d/klipper/blob/master/config/sample-aliases.cfg
+
+Cartesion example:
+https://github.com/Klipper3d/klipper/blob/master/config/example-cartesian.cfg

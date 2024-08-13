@@ -1,0 +1,3 @@
+klipper start from command line / IDE:
+
+~/klippy-env/bin/python /home/user/klipper/klippy/klippy.py /home/user/printer_data/config/printer.cfg -I /home/user/printer_data/comms/klippy.serial -l /home/user/printer_data/logs/klippy.log -a /home/user/printer_data/comms/klippy.sock

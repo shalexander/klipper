@@ -1,0 +1,7 @@
+Issues:
+https://www.reddit.com/r/klippers/comments/17uh595/flashing_klipper_on_an_arduino/
+https://klipper.discourse.group/t/issue-compiling-firmware-for-atmega328p/1028/8
+
+Flashing:
+# make flash FLASH_DEVICE=/dev/serial/by-id/insert_serial
+make flash FLASH_DEVICE=/dev/ttyS0

@@ -1,0 +1,4 @@
+KIAUH install:
+
+https://github.com/dw-0/kiauh
+https://klipper.discourse.group/t/installing-klipper-with-kiauh/10734
