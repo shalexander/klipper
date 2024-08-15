@@ -10,6 +10,7 @@ from extras.homing import Homing
 from stepper import PrinterRail
 from toolhead import Move, ToolHead
 from . import idex_modes
+from .virtual_stepper import VirtualPrinterRail
 
 # Conversion to XY only:
 # The backend works in (X, Y, Z, E) coordinates (X, Y, Z, Extruder)
@@ -18,11 +19,13 @@ from . import idex_modes
 
 # Was: USED_RAILS_LABELS = 'xyz'
 # iterates over [stepper_<x>] sections in config
-USED_RAILS_LABELS = "xy"
+NON_VIRTUAL_RAILS = "x"
+VIRTUAL_RAILS = "yz"
 
 # X, Y, Z, E (X, Y, Z, Extruder)
 # AXIS_IDX = (0, 1, 2)
-AXIS_IDX = (0, 1)
+NON_VIRTUAL_AXIS_IDX = (0,)
+VIRTUAL_AXIS_IDX = (1,2,)
 
 class CartKinematicsXY:
 
@@ -33,23 +36,27 @@ class CartKinematicsXY:
         self.dual_carriage_rails = []
 
         self.rails: list[PrinterRail] = []
-        for rail_label in USED_RAILS_LABELS:
-            printer_rail = stepper.LookupMultiRail(config.getsection('stepper_' + rail_label))
+        for rail_label in 'xyz':
+
+            if rail_label in NON_VIRTUAL_RAILS:
+                config_section = config.getsection('stepper_' + rail_label)
+                printer_rail = stepper.LookupMultiRail(config_section)
+            elif rail_label in VIRTUAL_RAILS:
+                printer_rail = VirtualPrinterRail(short_name=rail_label)
             self.rails.append(printer_rail)
 
         # self.rails: list[PrinterRail] = [stepper.LookupMultiRail(config.getsection('stepper_' + n))
         #               for n in USED_RAILS_LABELS]
 
-        for rail, axis in zip(self.rails, USED_RAILS_LABELS):
+        for rail, axis in zip(self.rails, 'xyz'):
             rail.setup_itersolve('cartesian_stepper_alloc', axis.encode())
 
         ranges = [r.get_range() for r in self.rails]
-        # Was:
-        # self.axes_min = toolhead.Coord(*[r[0] for r in ranges], e=0.)
-        # self.axes_max = toolhead.Coord(*[r[1] for r in ranges], e=0.)
-
-        self.axes_min = toolhead.Coord(*[r[0] for r in ranges], z=0.0, e=0.)
-        self.axes_max = toolhead.Coord(*[r[1] for r in ranges], z=0.0, e=0.)
+        self.axes_min = toolhead.Coord(*[r[0] for r in ranges], e=0.)
+        self.axes_max = toolhead.Coord(*[r[1] for r in ranges], e=0.)
+        # Was (custom to remove)
+        # self.axes_min = toolhead.Coord(*[r[0] for r in ranges], z=0.0, e=0.)
+        # self.axes_max = toolhead.Coord(*[r[1] for r in ranges], z=0.0, e=0.)
 
         self.dc_module = None
 
@@ -151,7 +158,7 @@ class CartKinematicsXY:
         end_pos = move.end_pos
 
         # for i in (0, 1, 2):
-        for i in AXIS_IDX:
+        for i in NON_VIRTUAL_AXIS_IDX:
             if (move.axes_d[i]
                 and (end_pos[i] < self.limits[i][0]
                      or end_pos[i] > self.limits[i][1])):
@@ -177,7 +184,7 @@ class CartKinematicsXY:
             self.max_z_velocity * z_ratio, self.max_z_accel * z_ratio)
 
     def get_status(self, eventtime):
-        axes = [a for a, (l, h) in zip(USED_RAILS_LABELS, self.limits) if l <= h]
+        axes = [a for a, (l, h) in zip(NON_VIRTUAL_RAILS, self.limits) if l <= h]
         return {
             'homed_axes': "".join(axes),
             'axis_minimum': self.axes_min,
